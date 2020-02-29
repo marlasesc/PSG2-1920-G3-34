@@ -9,7 +9,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="<spring:url value="/" htmlEscape="true" />"><span></span></a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-                <span class="sr-only"><os-p>Toggle navigation</os-p></span>
+                <span class="sr-only"><os-p></os-p></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -20,17 +20,17 @@
 
                 <petclinic:menuItem active="${name eq 'home'}" url="/" title="home page">
                     <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-                    <span>Home</span>
+                    <span>Inicio</span>
                 </petclinic:menuItem>
 
                 <petclinic:menuItem active="${name eq 'owners'}" url="/owners/find" title="find owners">
                     <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                    <span>Find owners</span>
+                    <span>Encuentra a los dueños</span>
                 </petclinic:menuItem>
 
                 <petclinic:menuItem active="${name eq 'vets'}" url="/vets" title="veterinarians">
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-                    <span>Veterinarians</span>
+                    <span>Veterinarios</span>
                 </petclinic:menuItem>
 
                 <petclinic:menuItem active="${name eq 'error'}" url="/oups"
