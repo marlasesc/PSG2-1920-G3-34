@@ -43,4 +43,9 @@ public interface SpringDataPetRepository extends PetRepository, Repository<Pet, 
 	@Query("DELETE FROM Pet p WHERE p.id = ?1")
 	void deleteById(int id) throws DataAccessException;
 
+	@Override
+	@Modifying
+	@Query("DELETE FROM Pet p WHERE p.owner.id = ?1")
+	void deleteAllByOwnerId(int ownerId) throws DataAccessException;
+
 }

@@ -40,6 +40,12 @@
 
     <br/>
     <br/>
+        <spring:url value="/owners/{ownerId}/delete" var="deleteOwnerUrl">
+                                    <spring:param name="ownerId" value="${owner.id}"/>
+                                    <spring:param name="petId" value="${pet.id}"/>
+                                </spring:url>
+                                <a href="${fn:escapeXml(deleteOwnerUrl)} "class="btn btn-default">Eliminar dueño</a>
+    <br/>
     <br/>
     <h2>Mascotas y visitas</h2>
 
