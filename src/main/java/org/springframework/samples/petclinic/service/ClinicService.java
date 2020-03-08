@@ -114,4 +114,9 @@ public class ClinicService {
 		this.visitRepository.deleteAllByPetId(petId);
 	}
 
+	@Transactional
+	public void deleteVetById(final int vetId) throws DataAccessException {
+		this.vetRepository.deleteById(vetId);
+	}
+
 }
