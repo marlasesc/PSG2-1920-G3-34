@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.springframework.samples.petclinic.model;
 
 import java.time.LocalDate;
@@ -48,21 +49,22 @@ public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate birthDate;
+	private LocalDate		birthDate;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id")
-	private PetType type;
+	private PetType			type;
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
-	private Owner owner;
+	private Owner			owner;
 
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
-	private Set<Visit> visits;
+	private Set<Visit>		visits;
 
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
-	private Set<Booking> bookings;
+	private Set<Booking>	bookings;
+
 
 	public void setBirthDate(final LocalDate birthDate) {
 		this.birthDate = birthDate;
@@ -95,7 +97,6 @@ public class Pet extends NamedEntity {
 		return this.visits;
 	}
 
-
 	protected void setVisitsInternal(final Set<Visit> visits) {
 		this.visits = visits;
 	}
@@ -118,14 +119,13 @@ public class Pet extends NamedEntity {
 		return this.bookings;
 	}
 
-
 	protected void setBookingsInternal(final Set<Booking> bookings) {
 		this.bookings = bookings;
 	}
 
 	public List<Booking> getBookings() {
 		List<Booking> sortedBookings = new ArrayList<>(this.getBookingsInternal());
-		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("date", false, false));
+		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, false));
 		return Collections.unmodifiableList(sortedBookings);
 	}
 
