@@ -125,7 +125,7 @@ public class Pet extends NamedEntity {
 
 	public List<Booking> getBookings() {
 		List<Booking> sortedBookings = new ArrayList<>(this.getBookingsInternal());
-		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, true));
+		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, false));
 		return Collections.unmodifiableList(sortedBookings);
 	}
 

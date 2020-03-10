@@ -28,6 +28,10 @@ public class Booking extends BaseEntity {
 	private Pet			pet;
 
 
+	public Booking() {
+		this.startDate = LocalDate.now();
+	}
+
 	public LocalDate getStartDate() {
 		return this.startDate;
 	}

@@ -9,7 +9,8 @@
     <jsp:attribute name="customScript">
         <script>
             $(function () {
-                $("#date").datepicker({dateFormat: 'yy/mm/dd'});
+                $("#startDate").datepicker({dateFormat: 'yy/mm/dd'});
+                $("#finishDate").datepicker({dateFormat: 'yy/mm/dd'});
             });
         </script>
     </jsp:attribute>
@@ -34,10 +35,10 @@
             </tr>
         </table>
 
-        <form:form modelAttribute="visit" class="form-horizontal">
+        <form:form modelAttribute="booking" class="form-horizontal">
             <div class="form-group has-feedback">
-                <petclinic:inputField label="Date" name="startDate"/>
-                <petclinic:inputField label="Date" name="finishDate"/>
+                <petclinic:inputField label="Fecha de inicio" name="startDate"/>
+                <petclinic:inputField label="Fecha de fin" name="finishDate"/>
             </div>
 
             <div class="form-group">
@@ -46,7 +47,26 @@
                     <button class="btn btn-default" type="submit">Añadir Reserva</button>
                 </div>
             </div>
-        </form:form>
+            
+         </form:form>   
+         
+        <br/>
+        <b>Reservas previas</b>
+        <table class="table table-striped">
+            <tr>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
+            </tr>
+            <c:forEach var="booking" items="${booking.pet.bookings}">
+                <c:if test="${!booking['new']}">
+                    <tr>
+                        <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy/MM/dd"/></td>
+                        <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy/MM/dd"/></td>
+                    </tr>
+                </c:if>
+            </c:forEach>
+        </table>
+        
     </jsp:body>
 
 </petclinic:layout>

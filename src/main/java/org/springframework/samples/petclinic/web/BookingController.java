@@ -20,12 +20,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class BookingController {
 
-	@Autowired
 	private ClinicService clinicService;
+
+	@Autowired
+	public BookingController(final ClinicService clinicService) {
+		this.clinicService = clinicService;
+	}
 
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
+	}
+
+	@InitBinder("booking")
+	public void initBookingBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new BookingValidator());
 	}
 
 	@ModelAttribute("booking")
@@ -53,7 +62,7 @@ public class BookingController {
 	}
 
 	@GetMapping(value = "/owners/*/pets/{petId}/bookings")
-	public String showVisits(@PathVariable final int petId, final Map<String, Object> model) {
+	public String showBookings(@PathVariable final int petId, final Map<String, Object> model) {
 		model.put("bookings", this.clinicService.findPetById(petId).getBookings());
 		return "bookingList";
 	}
