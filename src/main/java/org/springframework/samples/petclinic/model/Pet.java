@@ -62,7 +62,7 @@ public class Pet extends NamedEntity {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit>		visits;
 
-	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Booking>	bookings;
 
 
@@ -125,7 +125,7 @@ public class Pet extends NamedEntity {
 
 	public List<Booking> getBookings() {
 		List<Booking> sortedBookings = new ArrayList<>(this.getBookingsInternal());
-		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, false));
+		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, true));
 		return Collections.unmodifiableList(sortedBookings);
 	}
 
