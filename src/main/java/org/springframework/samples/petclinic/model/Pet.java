@@ -62,7 +62,7 @@ public class Pet extends NamedEntity {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Visit>		visits;
 
-	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.LAZY)
 	private Set<Booking>	bookings;
 
 

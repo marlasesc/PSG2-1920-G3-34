@@ -77,12 +77,11 @@
                     <table class="table-condensed">
                         <thead>
                         <tr>
-                            <th>Fecha de la reserva</th>
                             <th>Fecha de inicio</th>
                             <th>Fecha de fin</th>
                         </tr>
                         </thead>
-                        <c:forEach var="visit" items="${pet.bookings}">
+                        <c:forEach var="booking" items="${pet.bookings}">
                             <tr>
                                 <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy-MM-dd"/></td>
                                 <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy-MM-dd"/></td>
