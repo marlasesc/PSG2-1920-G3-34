@@ -28,7 +28,8 @@ public class BookingValidator implements Validator {
 
 		// startDate must be after every other finishDate
 		if (booking.getStartDate() != null && !this.isDateNotOverlaped(booking, booking.getPet().getBookings())) {
-			errors.rejectValue("startDate", "La fecha de inicio debe ser posterior o igual a la fecha de fin de la última reserva", "La fecha de inicio debe ser posterior o igual a la fecha de fin de la última reserva");
+			errors.rejectValue("startDate", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva");
+			errors.rejectValue("finishDate", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva");
 		}
 
 		// finishDate validation
