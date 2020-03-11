@@ -94,6 +94,11 @@ public class ClinicService {
 		this.bookingRepository.save(booking);
 	}
 
+	@Transactional
+	public void deleteBookingById(final int bookingId) throws DataAccessException {
+		this.bookingRepository.deleteById(bookingId);
+	}
+
 	@Transactional(readOnly = true)
 	public Pet findPetById(final int id) throws DataAccessException {
 		return this.petRepository.findById(id);

@@ -49,7 +49,7 @@ public class BookingValidator implements Validator {
 
 		return IntStream.range(0, oldBookings.size() - 1)
 			.boxed()
-			.allMatch(i -> oldBookings.get(i).getStartDate().isAfter(oldBookings.get(i+1).getFinishDate()));
+			.allMatch(i -> !oldBookings.get(i).getStartDate().isBefore(oldBookings.get(i+1).getFinishDate()));
 	}
 
 }

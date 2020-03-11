@@ -51,7 +51,7 @@ public class BookingController {
 	}
 
 	@PostMapping(value = "/owners/{ownerId}/pets/{petId}/bookings/new")
-	public String processNewVisitForm(@Valid final Booking booking, final BindingResult result) {
+	public String processNewBookingForm(@Valid final Booking booking, final BindingResult result) {
 		if (result.hasErrors()) {
 			return "pets/createOrUpdateBookingForm";
 		}
@@ -60,6 +60,13 @@ public class BookingController {
 			return "redirect:/owners/{ownerId}";
 		}
 	}
+
+	@GetMapping(value = "/owners/{ownerId}/pets/{petId}/bookings/{bookingId}/delete")
+	public String processBookingDeletion(@PathVariable("bookingId") final int bookingId) {
+		this.clinicService.deleteBookingById(bookingId);
+		return "redirect:/owners/{ownerId}";
+	}
+
 
 	@GetMapping(value = "/owners/*/pets/{petId}/bookings")
 	public String showBookings(@PathVariable final int petId, final Map<String, Object> model) {
