@@ -22,7 +22,6 @@ import java.util.Collection;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.samples.petclinic.forms.FormSpecialty;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.service.ClinicService;
@@ -33,6 +32,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -66,21 +66,21 @@ public class SpecialtyController {
 	
 	@GetMapping(value = "/specialties/new")
 	public String initCreationForm(final Vet vet, final ModelMap model) {
-		model.put("formSpecialty", new FormSpecialty());
+		model.put("specialty", new Specialty());
 		return SpecialtyController.VIEWS_SPECIALTIES_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/specialties/new")
-	public String processCreationForm(final Vet vet, @Valid final FormSpecialty formSpecialty, final BindingResult result, final ModelMap model) {
+	public String processCreationForm(final Vet vet, @Valid Specialty specialtyName, final BindingResult result, final ModelMap model) {
 		if (result.hasErrors()) {
-			model.put("formSpecialty", formSpecialty);
+			model.put("specialty", specialtyName);
 			return SpecialtyController.VIEWS_SPECIALTIES_CREATE_OR_UPDATE_FORM;
 		} else {
-			Specialty specialty = clinicService.findSpecialties().stream().filter(s -> s.getName().equals(formSpecialty.getSpecialty())).findFirst().orElse(null);
+			Specialty specialty = clinicService.findSpecialties().stream().filter(s -> s.getName().equals(specialtyName.getName())).findFirst().orElse(null);
 			if(specialty!=null) {
 				vet.addSpecialty(specialty);
+				clinicService.saveVet(vet);
 			}
-			clinicService.saveVet(vet);
 			return "redirect:/vets/{vetId}";
 		}
 	}

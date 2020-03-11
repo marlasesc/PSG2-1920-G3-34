@@ -8,7 +8,7 @@
     <jsp:body>
         <h2>
             <c:if test="${true}">Nueva </c:if> Especialidad
-        </h2><form:form modelAttribute="formSpecialty" class="form-horizontal">
+        </h2><form:form modelAttribute="specialty" class="form-horizontal">
         
             <div class="form-group has-feedback">
                 <div class="form-group">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="control-group">
-                    <petclinic:selectField name="specialty" label="Specialty" names="${specialties}" size="5"/>
+                    <petclinic:selectField name="name" label="Specialty" names="${specialties}" size="5"/>
                 </div>
             </div>
             <div class="form-group">
