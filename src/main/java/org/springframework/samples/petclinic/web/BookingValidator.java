@@ -1,6 +1,8 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.validation.Errors;
@@ -25,7 +27,7 @@ public class BookingValidator implements Validator {
 		}
 
 		// startDate must be after every other finishDate
-		if (booking.getStartDate() != null && this.isDateOverlaped(booking, booking.getPet().getBookings())) {
+		if (booking.getStartDate() != null && !this.isDateNotOverlaped(booking, booking.getPet().getBookings())) {
 			errors.rejectValue("startDate", "La fecha de inicio debe ser posterior o igual a la fecha de fin de la última reserva", "La fecha de inicio debe ser posterior o igual a la fecha de fin de la última reserva");
 		}
 
@@ -40,8 +42,14 @@ public class BookingValidator implements Validator {
 		}
 	}
 
-	private boolean isDateOverlaped(final Booking booking, final List<Booking> bookings) {
-		return bookings.stream().map(b -> b.getFinishDate()).filter(f -> f != null && !f.equals(booking.getFinishDate())).anyMatch(f -> booking.getStartDate().isBefore(f));
+	private boolean isDateNotOverlaped(final Booking booking, final List<Booking> bookings) {
+		List<Booking> oldBookings = bookings.stream()
+			.filter(b -> b.getFinishDate() != null && b.getStartDate() != null)
+			.collect(Collectors.toList());
+
+		return IntStream.range(0, oldBookings.size() - 1)
+			.boxed()
+			.allMatch(i -> oldBookings.get(i).getStartDate().isAfter(oldBookings.get(i+1).getFinishDate()));
 	}
 
 }
