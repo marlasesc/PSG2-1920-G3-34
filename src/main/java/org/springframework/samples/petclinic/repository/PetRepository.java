@@ -72,4 +72,6 @@ public interface PetRepository {
 	 */
 	void deleteById(int id) throws DataAccessException;
 
+	void deleteAllByOwnerId(int ownerId) throws DataAccessException;
+
 }

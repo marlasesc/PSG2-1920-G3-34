@@ -36,4 +36,9 @@ public interface SpringDataVisitRepository extends VisitRepository, Repository<V
 	@Query("DELETE FROM Visit v WHERE v.pet.id = ?1")
 	void deleteAllByPetId(int petId) throws DataAccessException;
 
+	@Override
+	@Modifying
+	@Query("DELETE FROM Visit v WHERE v.id = ?1")
+	void deleteById(int id) throws DataAccessException;
+
 }

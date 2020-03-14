@@ -129,4 +129,24 @@ public class ClinicService {
 		this.visitRepository.deleteAllByPetId(petId);
 	}
 
+	@Transactional
+	public void deleteVistitById(final int id) throws DataAccessException {
+		this.visitRepository.deleteById(id);
+	}
+
+	@Transactional
+	public void deleteOwnerById(final int id) throws DataAccessException {
+		this.ownerRepository.deleteById(id);
+	}
+
+	@Transactional
+	public void deletePetsByOwberId(final int ownerId) throws DataAccessException {
+		this.petRepository.deleteAllByOwnerId(ownerId);
+	}
+  
+	@Transactional
+	public void deleteVetById(final int vetId) throws DataAccessException {
+		this.vetRepository.deleteById(vetId);
+	}
+
 }

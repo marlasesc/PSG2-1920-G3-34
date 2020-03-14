@@ -65,7 +65,6 @@ public class Pet extends NamedEntity {
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
 	private Set<Booking>	bookings;
 
-
 	public void setBirthDate(final LocalDate birthDate) {
 		this.birthDate = birthDate;
 	}
