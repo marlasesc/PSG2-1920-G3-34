@@ -49,19 +49,21 @@ public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate	birthDate;
+	private LocalDate		birthDate;
 
 	@ManyToOne
 	@JoinColumn(name = "type_id")
-	private PetType		type;
+	private PetType			type;
 
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
-	private Owner		owner;
+	private Owner			owner;
 
 	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
-	private Set<Visit>	visits;
+	private Set<Visit>		visits;
 
+	@OneToMany(cascade = CascadeType.MERGE, mappedBy = "pet", fetch = FetchType.EAGER)
+	private Set<Booking>	bookings;
 
 	public void setBirthDate(final LocalDate birthDate) {
 		this.birthDate = birthDate;
@@ -107,6 +109,28 @@ public class Pet extends NamedEntity {
 	public void addVisit(final Visit visit) {
 		this.getVisitsInternal().add(visit);
 		visit.setPet(this);
+	}
+
+	protected Set<Booking> getBookingsInternal() {
+		if (this.bookings == null) {
+			this.bookings = new HashSet<>();
+		}
+		return this.bookings;
+	}
+
+	protected void setBookingsInternal(final Set<Booking> bookings) {
+		this.bookings = bookings;
+	}
+
+	public List<Booking> getBookings() {
+		List<Booking> sortedBookings = new ArrayList<>(this.getBookingsInternal());
+		PropertyComparator.sort(sortedBookings, new MutableSortDefinition("startDate", false, false));
+		return Collections.unmodifiableList(sortedBookings);
+	}
+
+	public void addBooking(final Booking booking) {
+		this.getBookingsInternal().add(booking);
+		booking.setPet(this);
 	}
 
 }
