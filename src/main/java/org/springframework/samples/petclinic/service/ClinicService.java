@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
@@ -25,6 +26,7 @@ import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
+import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.BookingRepository;
@@ -83,6 +85,11 @@ public class ClinicService {
 	public void saveOwner(final Owner owner) throws DataAccessException {
 		this.ownerRepository.save(owner);
 	}
+	
+	@Transactional
+	public void saveVet(final Vet vet) throws DataAccessException {
+		this.vetRepository.save(vet);
+	}
 
 	@Transactional
 	public void saveVisit(final Visit visit) throws DataAccessException {
@@ -129,6 +136,22 @@ public class ClinicService {
 		this.visitRepository.deleteAllByPetId(petId);
 	}
 
+	public Vet findVetById(int vetId) throws DataAccessException {
+		return this.vetRepository.findById(vetId);
+	}
+
+	public Collection<Specialty> findSpecialties() throws DataAccessException {
+		return this.vetRepository.findSpecialties();
+	}
+	
+	public void saveSpecialty(final Specialty a) {
+		this.vetRepository.save(a);
+	}
+	
+	public Specialty findSpecialtyById(int id) {
+		return this.vetRepository.findSpecialtyById(id);
+	}
+
 	@Transactional
 	public void deleteVistitById(final int id) throws DataAccessException {
 		this.visitRepository.deleteById(id);
@@ -148,5 +171,6 @@ public class ClinicService {
 	public void deleteVetById(final int vetId) throws DataAccessException {
 		this.vetRepository.deleteById(vetId);
 	}
+
 
 }
