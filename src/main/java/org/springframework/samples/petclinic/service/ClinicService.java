@@ -22,12 +22,14 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
+import org.springframework.samples.petclinic.repository.BookingRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
@@ -52,13 +54,16 @@ public class ClinicService {
 
 	private VisitRepository	visitRepository;
 
+	private BookingRepository bookingRepository;
+
 
 	@Autowired
-	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository) {
+	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository, final BookingRepository bookingRepository) {
 		this.petRepository = petRepository;
 		this.vetRepository = vetRepository;
 		this.ownerRepository = ownerRepository;
 		this.visitRepository = visitRepository;
+		this.bookingRepository = bookingRepository;
 	}
 
 	@Transactional(readOnly = true)
@@ -89,6 +94,16 @@ public class ClinicService {
 	@Transactional
 	public void saveVisit(final Visit visit) throws DataAccessException {
 		this.visitRepository.save(visit);
+	}
+
+	@Transactional
+	public void saveBooking(final Booking booking) throws DataAccessException {
+		this.bookingRepository.save(booking);
+	}
+
+	@Transactional
+	public void deleteBookingById(final int bookingId) throws DataAccessException {
+		this.bookingRepository.deleteById(bookingId);
 	}
 
 	@Transactional(readOnly = true)
@@ -136,4 +151,26 @@ public class ClinicService {
 	public Specialty findSpecialtyById(int id) {
 		return this.vetRepository.findSpecialtyById(id);
 	}
+
+	@Transactional
+	public void deleteVistitById(final int id) throws DataAccessException {
+		this.visitRepository.deleteById(id);
+	}
+
+	@Transactional
+	public void deleteOwnerById(final int id) throws DataAccessException {
+		this.ownerRepository.deleteById(id);
+	}
+
+	@Transactional
+	public void deletePetsByOwberId(final int ownerId) throws DataAccessException {
+		this.petRepository.deleteAllByOwnerId(ownerId);
+	}
+  
+	@Transactional
+	public void deleteVetById(final int vetId) throws DataAccessException {
+		this.vetRepository.deleteById(vetId);
+	}
+
+
 }
