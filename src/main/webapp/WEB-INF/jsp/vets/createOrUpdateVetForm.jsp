@@ -14,8 +14,13 @@
         <div class="form-group has-feedback">
             <petclinic:inputField label="Nombre" name="firstName"/>
             <petclinic:inputField label="Apellido" name="lastName"/>
-
         </div>
+        
+        
+        <div class="control-group">
+        	<petclinic:selectField name="specialties" label="Especialidad " names="${allSpecialties}" size="4"/>
+        </div>
+        
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
