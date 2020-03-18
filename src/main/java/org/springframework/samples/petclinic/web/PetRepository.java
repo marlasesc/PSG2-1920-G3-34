@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.samples.petclinic.repository;
+package org.springframework.samples.petclinic.web;
 
 import java.util.List;
 
@@ -71,7 +71,5 @@ public interface PetRepository {
 	 * @see BaseEntity#isNew
 	 */
 	void deleteById(int id) throws DataAccessException;
-
-	void deleteAllByOwnerId(int ownerId) throws DataAccessException;
 
 }
