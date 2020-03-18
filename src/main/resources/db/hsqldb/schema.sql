@@ -70,5 +70,5 @@ CREATE TABLE bookings (
   finish_date DATE
 );
 
-ALTER TABLE bookings ADD CONSTRAINT fk_bookings_pets FOREIGN KEY (pet_id) REFERENCES pets (id);
+ALTER TABLE bookings ADD CONSTRAINT fk_bookings_pets FOREIGN KEY (pet_id) REFERENCES pets (id) ON DELETE CASCADE;
 CREATE INDEX bookings_pet_id ON bookings (pet_id);

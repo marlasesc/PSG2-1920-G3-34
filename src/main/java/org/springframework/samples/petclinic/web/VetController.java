@@ -16,10 +16,13 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Vets;
@@ -28,18 +31,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-
-import java.util.Collection;
-import java.util.Map;
-import javax.validation.Valid;
 /**
  * @author Juergen Hoeller
  * @author Mark Fisher
@@ -50,7 +47,7 @@ import javax.validation.Valid;
 public class VetController {
 
 	private final ClinicService clinicService;
-	
+
 	private static final String VIEWS_VET_CREATE_OR_UPDATE_FORM = "vets/createOrUpdateVetForm";
 
 
@@ -83,44 +80,48 @@ public class VetController {
 		vets.getVetList().addAll(this.clinicService.findVets());
 		return vets;
 	}
-	
-	
+
+
 	@GetMapping(value = "/vets/new")
-	public String initCreationForm(Map<String, Object> model) {
+	public String initCreationForm(final Map<String, Object> model) {
 		Vet vet = new Vet();
 		model.put("vet", vet);
-		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+		return VetController.VIEWS_VET_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/vets/new")
-	public String processCreationForm(@Valid Vet vet, BindingResult result) {
+	public String processCreationForm(@Valid final Vet vet, final BindingResult result) {
 		if (result.hasErrors()) {
-			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+			return VetController.VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		}
 		else {
 			this.clinicService.saveVet(vet);
 			return "redirect:/vets/" + vet.getId();
 		}
 	}
-	
+
 	@GetMapping(value = "/vets/{vetId}/edit")
-	public String initUpdateOwnerForm(@PathVariable("vetId") int vetId, Model model) {
+	public String initUpdateOwnerForm(@PathVariable("vetId") final int vetId, final Model model) {
 		Vet vet = this.clinicService.findVetById(vetId);
 		model.addAttribute(vet);
-		return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+		return VetController.VIEWS_VET_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/vets/{vetId}/edit")
-	public String processUpdateOwnerForm(@Valid Vet newVet, BindingResult result,
-			@PathVariable("vetId") int vetId) {
-		Vet vet = clinicService.findVetById(vetId);
+	public String processUpdateOwnerForm(@RequestParam(value = "specialties", required = false) final List<Specialty> specialties, @Valid final Vet vet, final BindingResult result,
+			@PathVariable("vetId") final int vetId) {
+		Vet newVet = this.clinicService.findVetById(vetId);
 		if (result.hasErrors()) {
-			return VIEWS_VET_CREATE_OR_UPDATE_FORM;
+			return VetController.VIEWS_VET_CREATE_OR_UPDATE_FORM;
 		}
 		else {
-			vet.setFirstName(newVet.getFirstName());
-			vet.setLastName(newVet.getLastName());
-			this.clinicService.saveVet(vet);
+
+			newVet.setFirstName(vet.getFirstName());
+			newVet.setLastName(vet.getLastName());
+
+			newVet.setSpecialties(specialties);
+
+			this.clinicService.saveVet(newVet);
 			return "redirect:/vets/{vetId}";
 		}
 	}
@@ -131,13 +132,13 @@ public class VetController {
 	 * @return a ModelMap with the model attributes for the view
 	 */
 	@GetMapping("/vets/{vetId}")
-	public ModelAndView showOwner(@PathVariable("vetId") int vetId) {
+	public ModelAndView showOwner(@PathVariable("vetId") final int vetId) {
 		ModelAndView mav = new ModelAndView("vets/vetDetails");
 		mav.addObject(this.clinicService.findVetById(vetId));
 		return mav;
 	}
-	
-	@ModelAttribute("specialties")
+
+	@ModelAttribute("allSpecialties")
 	public Collection<Specialty> populateSpecialties() {
 		return this.clinicService.findSpecialties();
 	}

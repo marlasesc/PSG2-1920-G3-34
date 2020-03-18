@@ -16,7 +16,7 @@
 package org.springframework.samples.petclinic.model;
 
 import java.util.ArrayList;
-
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -58,23 +58,27 @@ public class Vet extends Person {
 		return this.specialties;
 	}
 
-	protected void setSpecialtiesInternal(Set<Specialty> specialties) {
+	protected void setSpecialtiesInternal(final Set<Specialty> specialties) {
 		this.specialties = specialties;
 	}
 
 	@XmlElement
 	public List<Specialty> getSpecialties() {
-		List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
+		List<Specialty> sortedSpecs = new ArrayList<>(this.getSpecialtiesInternal());
 		PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
 		return Collections.unmodifiableList(sortedSpecs);
 	}
 
-	public int getNrOfSpecialties() {
-		return getSpecialtiesInternal().size();
+	public void setSpecialties(final Collection<Specialty> specialties) {
+		this.specialties = new HashSet<>(specialties);
 	}
 
-	public void addSpecialty(Specialty specialty) {
-		getSpecialtiesInternal().add(specialty);
+	public int getNrOfSpecialties() {
+		return this.getSpecialtiesInternal().size();
+	}
+
+	public void addSpecialty(final Specialty specialty) {
+		this.getSpecialtiesInternal().add(specialty);
 	}
 
 }
