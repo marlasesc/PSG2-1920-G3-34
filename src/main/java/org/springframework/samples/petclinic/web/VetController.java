@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -119,7 +120,11 @@ public class VetController {
 			newVet.setFirstName(vet.getFirstName());
 			newVet.setLastName(vet.getLastName());
 
-			newVet.setSpecialties(specialties);
+			if (specialties != null) {
+				newVet.setSpecialties(specialties);
+			} else {
+				newVet.setSpecialties(new ArrayList<>());
+			}
 
 			this.clinicService.saveVet(newVet);
 			return "redirect:/vets/{vetId}";

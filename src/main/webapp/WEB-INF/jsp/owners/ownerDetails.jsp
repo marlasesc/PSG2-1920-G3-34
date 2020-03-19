@@ -51,7 +51,7 @@
 
     <table class="table table-striped">
         <c:forEach var="pet" items="${owner.pets}">
-
+			
             <tr>
                 <td valign="top">
                     <dl class="dl-horizontal">
@@ -66,6 +66,9 @@
                 <td valign="top">
                     <table class="table-condensed">
                         <thead>
+                        
+                        <tr><td><h2>Visitas</h2></td></tr>
+                        
                         <tr>
                             <th>Fecha de la visita</th>
                             <th>Descripción</th>
@@ -99,11 +102,14 @@
                         
                         </tr>
                         
+                        <tr><td><h2>Reservas</h2></td></tr>
                         
                         <thead>
+                        
                         <tr>
-                            <th>Fecha de inicio de la reserva</th>
-                            <th>Fecha de fin de la reserva</th>
+                            <th>Fecha de inicio</th>
+                            <th>Fecha de fin</th>
+                            <th>Detalles</th>
                         </tr>
                         </thead>
                         
@@ -112,6 +118,7 @@
                             <tr>
                                 <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy-MM-dd"/></td>
                                 <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy-MM-dd"/></td>
+                                <td><c:out value="${booking.details}"/></td>
                                 
                                 <td>
 	                                <spring:url value="/owners/{ownerId}/pets/{petId}/bookings/{bookingId}/delete" var="deleteBookingUrl">
