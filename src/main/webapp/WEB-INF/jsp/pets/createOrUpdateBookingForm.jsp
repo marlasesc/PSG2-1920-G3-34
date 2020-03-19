@@ -39,6 +39,7 @@
             <div class="form-group has-feedback">
                 <petclinic:inputField label="Fecha de inicio" name="startDate"/>
                 <petclinic:inputField label="Fecha de fin" name="finishDate"/>
+                 <petclinic:inputField label="Detalles" name="details"/>
             </div>
 
             <div class="form-group">
@@ -56,12 +57,14 @@
             <tr>
                 <th>Fecha de inicio</th>
                 <th>Fecha de fin</th>
+                <th>Detalles</th>
             </tr>
             <c:forEach var="booking" items="${booking.pet.bookings}">
                 <c:if test="${!booking['new']}">
                     <tr>
                         <td><petclinic:localDate date="${booking.startDate}" pattern="yyyy/MM/dd"/></td>
                         <td><petclinic:localDate date="${booking.finishDate}" pattern="yyyy/MM/dd"/></td>
+                        <td><c:out value="${booking.details}"/></td>
                     </tr>
                 </c:if>
             </c:forEach>

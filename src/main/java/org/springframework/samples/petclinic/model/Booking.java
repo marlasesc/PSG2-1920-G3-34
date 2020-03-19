@@ -15,6 +15,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "bookings")
 public class Booking extends BaseEntity {
 
+	@Column(name = "details")
+	private String	details;
+
 	@Column(name = "start_date")
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	private LocalDate	startDate;
@@ -30,6 +33,14 @@ public class Booking extends BaseEntity {
 
 	public Booking() {
 		this.startDate = LocalDate.now();
+	}
+
+	public String getDetails() {
+		return this.details;
+	}
+
+	public void setDetails(final String details) {
+		this.details = details;
 	}
 
 	public LocalDate getStartDate() {

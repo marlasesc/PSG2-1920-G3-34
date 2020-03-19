@@ -67,7 +67,8 @@ CREATE TABLE bookings (
   id          INTEGER IDENTITY PRIMARY KEY,
   pet_id      INTEGER NOT NULL,
   start_date  DATE,
-  finish_date DATE
+  finish_date DATE,
+  details     VARCHAR(255)
 );
 
 ALTER TABLE bookings ADD CONSTRAINT fk_bookings_pets FOREIGN KEY (pet_id) REFERENCES pets (id) ON DELETE CASCADE;

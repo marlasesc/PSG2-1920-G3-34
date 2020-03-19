@@ -14,7 +14,7 @@
         <div class="form-group has-feedback">
             <petclinic:inputField label="Nombre" name="firstName"/>
             <petclinic:inputField label="Apellido" name="lastName"/>
-            <petclinic:inputField label="Direccion" name="address"/>
+            <petclinic:inputField label="Dirección" name="address"/>
             <petclinic:inputField label="Ciudad" name="city"/>
             <petclinic:inputField label="Telefono" name="telephone"/>
         </div>
