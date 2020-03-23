@@ -18,11 +18,11 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Booking;
+import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -30,6 +30,7 @@ import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.BookingRepository;
+import org.springframework.samples.petclinic.repository.CauseRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
@@ -46,24 +47,28 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ClinicService {
 
-	private PetRepository	petRepository;
+	private PetRepository		petRepository;
 
-	private VetRepository	vetRepository;
+	private VetRepository		vetRepository;
 
-	private OwnerRepository	ownerRepository;
+	private OwnerRepository		ownerRepository;
 
-	private VisitRepository	visitRepository;
+	private VisitRepository		visitRepository;
 
-	private BookingRepository bookingRepository;
+	private BookingRepository	bookingRepository;
+
+	private CauseRepository		causeRepository;
 
 
 	@Autowired
-	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository, final BookingRepository bookingRepository) {
+	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository, final BookingRepository bookingRepository, final CauseRepository causeRepository) {
 		this.petRepository = petRepository;
 		this.vetRepository = vetRepository;
 		this.ownerRepository = ownerRepository;
 		this.visitRepository = visitRepository;
 		this.bookingRepository = bookingRepository;
+		this.causeRepository = causeRepository;
+
 	}
 
 	@Transactional(readOnly = true)
@@ -85,7 +90,7 @@ public class ClinicService {
 	public void saveOwner(final Owner owner) throws DataAccessException {
 		this.ownerRepository.save(owner);
 	}
-	
+
 	@Transactional
 	public void saveVet(final Vet vet) throws DataAccessException {
 		this.vetRepository.save(vet);
@@ -136,19 +141,19 @@ public class ClinicService {
 		this.visitRepository.deleteAllByPetId(petId);
 	}
 
-	public Vet findVetById(int vetId) throws DataAccessException {
+	public Vet findVetById(final int vetId) throws DataAccessException {
 		return this.vetRepository.findById(vetId);
 	}
 
 	public Collection<Specialty> findSpecialties() throws DataAccessException {
 		return this.vetRepository.findSpecialties();
 	}
-	
+
 	public void saveSpecialty(final Specialty a) {
 		this.vetRepository.save(a);
 	}
-	
-	public Specialty findSpecialtyById(int id) {
+
+	public Specialty findSpecialtyById(final int id) {
 		return this.vetRepository.findSpecialtyById(id);
 	}
 
@@ -166,11 +171,20 @@ public class ClinicService {
 	public void deletePetsByOwberId(final int ownerId) throws DataAccessException {
 		this.petRepository.deleteAllByOwnerId(ownerId);
 	}
-  
+
 	@Transactional
 	public void deleteVetById(final int vetId) throws DataAccessException {
 		this.vetRepository.deleteById(vetId);
 	}
 
+	@Transactional
+	public void saveCause(final Cause cause) throws DataAccessException {
+		this.causeRepository.save(cause);
+	}
+
+	@Transactional
+	public Collection<Cause> findAllCauses() throws DataAccessException {
+		return this.causeRepository.findAll();
+	}
 
 }

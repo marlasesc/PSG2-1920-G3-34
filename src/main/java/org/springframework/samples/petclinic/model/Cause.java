@@ -17,10 +17,12 @@
 package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-@MappedSuperclass
+@Entity
+@Table(name = "causes")
 public class Cause extends BaseEntity {
 
 	// As a client, we can create a cause that contains a name and description (string),
@@ -34,7 +36,6 @@ public class Cause extends BaseEntity {
 	protected String	description;
 
 	@Column(name = "budget")
-	@NotEmpty
 	protected Integer	budget;
 
 	@Column(name = "organization")
