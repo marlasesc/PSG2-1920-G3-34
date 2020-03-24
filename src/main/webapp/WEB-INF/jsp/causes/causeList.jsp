@@ -13,22 +13,30 @@
 		<thead>
 			<tr>
 				<th>Nombre</th>
-				<th>Descripción</th>
-				<th>Presupuesto</th>
-				<th>Organización</th>
+				<th>DescripciÃ³n</th>
+				<th>Objetivo</th>
+				<th>OrganizaciÃ³n</th>
 
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${causes}" var="cause">
 				<tr>
-					<td><c:out value="${cause.name} " /></td>
+					
+					<td>
+                    	<spring:url value="/causes/{causeId}" var="causeUrl">
+                        	<spring:param name="causeId" value="${cause.id}"/>
+                    	</spring:url>
+                    	<a href="${fn:escapeXml(causeUrl)}"><c:out value="${cause.name}"/></a>
+                	</td>
 					<td><c:out value="${cause.description} " /></td>
 					<td><c:out value="${cause.budget} " /></td>
 					<td><c:out value="${cause.organization} " /></td>
+
 					<td><spring:url value="/causes/{causeId}/delete" var="deleteCauseUrl">
 							<spring:param name="causeId" value="${cause.id}" />
 						</spring:url> <a href="${fn:escapeXml(deleteCauseUrl)}">Eliminar causa</a></td>
+
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -36,7 +44,7 @@
 
 	<table class="table-buttons">
 		<tr>
-			<td><a class="btn btn-default" href='<spring:url value="/causes/new" htmlEscape="true"/>'>Añadir causa</a></td>
+			<td><a class="btn btn-default" href='<spring:url value="/causes/new" htmlEscape="true"/>'>AÃ±adir causa</a></td>
 		</tr>
 	</table>
 </petclinic:layout>

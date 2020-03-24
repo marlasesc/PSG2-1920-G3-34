@@ -17,9 +17,7 @@
 			<petclinic:inputField label="Description" name="description" />
 			<petclinic:inputField label="Presupuesto" name="budget" />
 			<petclinic:inputField label="Organización" name="organization" />
-
 		</div>
-
 
 		<div class="form-group">
 			<div class="col-sm-offset-2 col-sm-10">

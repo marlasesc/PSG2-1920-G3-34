@@ -191,4 +191,8 @@ public class ClinicService {
 		this.causeRepository.deleteById(id);
 	}
 
+	public Cause findCauseById(int causeId) {
+		return this.causeRepository.findById(causeId);
+	}
+
 }
