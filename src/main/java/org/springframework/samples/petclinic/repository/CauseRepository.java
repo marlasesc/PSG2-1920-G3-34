@@ -30,5 +30,6 @@ public interface CauseRepository {
 	Cause findById(int causeId) throws DataAccessException;
 
 	void deleteById(int id) throws DataAccessException;
+	
 
 }

@@ -187,4 +187,8 @@ public class ClinicService {
 		return this.causeRepository.findAll();
 	}
 
+	public Cause findCauseById(int causeId) {
+		return this.causeRepository.findById(causeId);
+	}
+
 }

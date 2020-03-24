@@ -24,10 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CauseController {
@@ -60,11 +63,39 @@ public class CauseController {
 			return "redirect:/causes";
 		}
 	}
+	
+	@GetMapping(value = "/causes/{causeId}/edit")
+	public String initUpdateOwnerForm(@PathVariable("causeId") final int causeId, final Model model) {
+			Cause cause = this.clinicService.findCauseById(causeId);
+			model.addAttribute(cause);
+			return "causes/createOrUpdateCauseForm";
+		}
+
+	@PostMapping(value = "/causes/{causeId}/edit")
+	public String processUpdateOwnerForm(@Valid final Cause cause, final BindingResult result, @PathVariable("causeId") final int causeId) {
+		if (result.hasErrors()) {
+			return "causes/createOrUpdateCauseForm";
+		} else {
+			cause.setId(causeId);
+			this.clinicService.saveCause(cause);
+			return "redirect:/causes/{causeId}";
+		}
+	}
+	
+	@GetMapping("/causes/{causeId}")
+	public ModelAndView showCause(@PathVariable("causeId") final int causeId) {
+		ModelAndView mav = new ModelAndView("causes/causeDetails");
+		mav.addObject(this.clinicService.findCauseById(causeId));
+		return mav;
+	}
+
 
 	@GetMapping(value = "/causes")
-	public String showVisits(final Map<String, Object> model) {
+	public String showCauses(final Map<String, Object> model) {
 		model.put("causes", this.clinicService.findAllCauses());
 		return "causes/causeList";
 	}
+	
+	
 
 }
