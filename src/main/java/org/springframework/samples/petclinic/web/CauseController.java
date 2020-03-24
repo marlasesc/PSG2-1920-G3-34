@@ -24,7 +24,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -97,5 +99,13 @@ public class CauseController {
 	}
 	
 	
+
+	@GetMapping(value = "/causes/{causeId}/delete")
+	public String processDeletion(@PathVariable("causeId") final int causeId, final ModelMap model) {
+		this.clinicService.deleteCauseById(causeId);
+
+		return "redirect:/causes";
+
+	}
 
 }

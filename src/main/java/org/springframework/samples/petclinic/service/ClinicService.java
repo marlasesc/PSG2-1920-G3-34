@@ -186,6 +186,10 @@ public class ClinicService {
 	public Collection<Cause> findAllCauses() throws DataAccessException {
 		return this.causeRepository.findAll();
 	}
+	@Transactional
+	public void deleteCauseById(final int id) throws DataAccessException {
+		this.causeRepository.deleteById(id);
+	}
 
 	public Cause findCauseById(int causeId) {
 		return this.causeRepository.findById(causeId);
