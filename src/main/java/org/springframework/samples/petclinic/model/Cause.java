@@ -17,7 +17,6 @@
 package org.springframework.samples.petclinic.model;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -41,93 +40,87 @@ public class Cause extends BaseEntity {
 	//a budget target (numeric), and an active non profit organization (string) that will use the budget for the cause.
 	@Column(name = "name")
 	@NotEmpty
-	protected String	name;
+	protected String		name;
 
 	@Column(name = "description")
 	@NotEmpty
-	protected String	description;
+	protected String		description;
 
 	@Column(name = "budget")
-	protected Integer	budget;
-	
-//	@Column(name = "total_donations")
-//	protected Integer	totalDonations;
+	protected Integer		budget;
 
 	@Column(name = "organization")
 	@NotEmpty
-	protected String	organization;
-	
-//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cause")
-//	private Set<Donation>	donations;
+	protected String		organization;
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "cause")
+	private Set<Donation>	donations;
+
+
+	public Integer getSumDonations() {
+		Integer sum = 0;
+		for (Donation aux : this.donations) {
+			sum = sum + aux.getMoneyAmount();
+		}
+		return sum;
+	}
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
 	public Integer getBudget() {
-		return budget;
+		return this.budget;
 	}
 
-	public void setBudget(Integer budget) {
+	public void setBudget(final Integer budget) {
 		this.budget = budget;
 	}
 
-//	public Integer getTotalDonations() {
-//		return totalDonations;
-//	}
-//
-//	public void setTotalDonations(Integer totalDonations) {
-//		this.totalDonations = totalDonations;
-//	}
-
 	public String getOrganization() {
-		return organization;
+		return this.organization;
 	}
 
-	public void setOrganization(String organization) {
+	public void setOrganization(final String organization) {
 		this.organization = organization;
 	}
-	
-//	protected Set<Donation> getDonationsInternal() {
-//		if (this.donations == null) {
-//			this.donations = new HashSet<>();
-//		}
-//		return this.donations;
-//	}
-//
-//	protected void setDonationsInternal(Set<Donation> donations) {
-//		this.donations = donations;
-//	}
-//
-//	public List<Donation> getDonations() {
-//		List<Donation> sortedDonations = new ArrayList<>(getDonationsInternal());
-//		PropertyComparator.sort(sortedDonations, new MutableSortDefinition("name", true, true));
-//		return Collections.unmodifiableList(sortedDonations);
-//	}
-//
-//	public void addDonation(Donation donation) {
-//		getDonationsInternal().add(donation);
-//		donation.setCause(this);
-//	}
-//	
-//	@Override
-//	public String toString() {
-//		return "Cause [name=" + name + ", description=" + description + ", budget=" + budget + ", totalDonations="
-//				+ totalDonations + ", organization=" + organization + ", donations=" + donations + "]";
-//	}
 
+	protected Set<Donation> getDonationsInternal() {
+		if (this.donations == null) {
+			this.donations = new HashSet<>();
+		}
+		return this.donations;
+	}
 
+	protected void setDonationsInternal(final Set<Donation> donations) {
+		this.donations = donations;
+	}
+
+	public List<Donation> getDonations() {
+		List<Donation> sortedDonations = new ArrayList<>(this.getDonationsInternal());
+		PropertyComparator.sort(sortedDonations, new MutableSortDefinition("name", true, true));
+		return Collections.unmodifiableList(sortedDonations);
+	}
+
+	public void addDonation(final Donation donation) {
+		this.getDonationsInternal().add(donation);
+		donation.setCause(this);
+	}
+
+	@Override
+	public String toString() {
+		return "Cause [name=" + this.name + ", description=" + this.description + ", budget=" + this.budget + ", organization=" + this.organization + ", donations=" + this.donations + "]";
+	}
 
 }

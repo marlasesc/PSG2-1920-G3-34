@@ -23,6 +23,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Booking;
 import org.springframework.samples.petclinic.model.Cause;
+import org.springframework.samples.petclinic.model.Donation;
 import org.springframework.samples.petclinic.model.Owner;
 import org.springframework.samples.petclinic.model.Pet;
 import org.springframework.samples.petclinic.model.PetType;
@@ -31,6 +32,7 @@ import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.model.Visit;
 import org.springframework.samples.petclinic.repository.BookingRepository;
 import org.springframework.samples.petclinic.repository.CauseRepository;
+import org.springframework.samples.petclinic.repository.DonationRepository;
 import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
@@ -59,15 +61,19 @@ public class ClinicService {
 
 	private CauseRepository		causeRepository;
 
+	private DonationRepository	donationRepository;
+
 
 	@Autowired
-	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository, final BookingRepository bookingRepository, final CauseRepository causeRepository) {
+	public ClinicService(final PetRepository petRepository, final VetRepository vetRepository, final OwnerRepository ownerRepository, final VisitRepository visitRepository, final BookingRepository bookingRepository, final CauseRepository causeRepository,
+		final DonationRepository donationRepository) {
 		this.petRepository = petRepository;
 		this.vetRepository = vetRepository;
 		this.ownerRepository = ownerRepository;
 		this.visitRepository = visitRepository;
 		this.bookingRepository = bookingRepository;
 		this.causeRepository = causeRepository;
+		this.donationRepository = donationRepository;
 
 	}
 
@@ -191,8 +197,24 @@ public class ClinicService {
 		this.causeRepository.deleteById(id);
 	}
 
-	public Cause findCauseById(int causeId) {
+	public Cause findCauseById(final int causeId) {
 		return this.causeRepository.findById(causeId);
+	}
+
+	public Donation findDonationById(final int donationId) throws DataAccessException {
+		return this.donationRepository.findById(donationId);
+	}
+
+	public void saveDonation(final Donation donation) throws DataAccessException {
+		this.donationRepository.save(donation);
+	}
+
+	public Collection<Donation> findAllDonations() throws DataAccessException {
+		return this.donationRepository.findAll();
+	}
+
+	public Integer findDonationsByCauseId(final int causeId) {
+		return this.donationRepository.findSumDonationsByCauseId(causeId);
 	}
 
 }

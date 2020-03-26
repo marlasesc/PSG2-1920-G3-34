@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <th>Total recaudado</th>
-            <td><c:out value=""/></td>
+            <td><c:out value="${sumDonations}"/></td>
         </tr>
         <tr>
             <th>Organización</th>
@@ -36,5 +36,37 @@
         <spring:param name="causeId" value="${cause.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar causa</a>
+    
+    <spring:url value="{causeId}/donations/new" var="addDonationUrl">
+        <spring:param name="causeId" value="${cause.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(addDonationUrl)}" class="btn btn-default">Realizar una donación</a>
+    
+    <h2>Donations</h2>
+
+    <table id="donationsTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th style="width: 150px;">Name</th>
+            <th style="width: 200px;">Money amount</th>
+            <th>Date of donation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach items="${cause.donations}" var="donations">
+            <tr>
+                <td>
+                   <c:out value="${donations.name}"/>
+                </td>
+                <td>
+                    <c:out value="${donations.moneyAmount}"/>
+                </td>
+                <td>
+                    <c:out value="${donations.dateDonation}"/>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 
 </petclinic:layout>
