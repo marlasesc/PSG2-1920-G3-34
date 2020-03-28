@@ -18,6 +18,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -96,7 +97,8 @@ public class CauseController {
 
 	@GetMapping(value = "/causes")
 	public String showCauses(final Map<String, Object> model) {
-		model.put("causes", this.clinicService.findAllCauses());
+		model.put("causes", this.clinicService.findAllCauses().stream().filter(x -> x.getBudget() > x.getSumDonations()).collect(Collectors.toList()));
+		model.put("closed_causes", this.clinicService.findAllCauses().stream().filter(x -> x.getBudget() == x.getDonations().stream().mapToInt(y -> y.getMoneyAmount()).sum()).collect(Collectors.toList()));
 		return "causes/causeList";
 	}
 
