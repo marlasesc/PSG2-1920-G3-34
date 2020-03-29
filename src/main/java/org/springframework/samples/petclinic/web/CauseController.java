@@ -22,10 +22,13 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
+import org.springframework.samples.petclinic.repository.CauseRepository;
 import org.springframework.samples.petclinic.service.ClinicService;
+import org.springframework.samples.petclinic.service.exception.NewBudgetCantBeLessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -40,6 +43,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CauseController {
 
 	private final ClinicService clinicService;
+	private final CauseRepository causeRepository;
 
 
 	@ModelAttribute("cause")
@@ -49,8 +53,9 @@ public class CauseController {
 	}
 
 	@Autowired
-	public CauseController(final ClinicService clinicService) {
+	public CauseController(final ClinicService clinicService, final CauseRepository causeRepository) {
 		this.clinicService = clinicService;
+		this.causeRepository = causeRepository;
 	}
 
 	@GetMapping(value = "/causes/new")
@@ -80,8 +85,14 @@ public class CauseController {
 		if (result.hasErrors()) {
 			return "causes/createOrUpdateCauseForm";
 		} else {
-			cause.setId(causeId);
-			this.clinicService.saveCause(cause);
+			Cause causeToUpdate=this.causeRepository.findById(causeId);
+			BeanUtils.copyProperties(cause, causeToUpdate, "id","name","description", "budget", "organization");                                                                                  
+            try {                    
+                this.clinicService.saveCause(cause, causeToUpdate);                    
+            } catch (NewBudgetCantBeLessException ex) {
+                result.rejectValue("budget", "illegalData", "Budget cant be less than old budget");
+                return "causes/createOrUpdateCauseForm";
+            }
 			return "redirect:/causes/{causeId}";
 		}
 	}
