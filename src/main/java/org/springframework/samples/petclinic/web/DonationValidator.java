@@ -45,6 +45,10 @@ public class DonationValidator implements Validator {
 		if (sumDonations + donation.getMoneyAmount() > budget) {
 			errors.rejectValue("moneyAmount", "invalid", "No se puede donar si supera el objetivo (falta " + cantidadRestante.toString() + " para alcanzar el objetivo)");
 		}
+
+		if (donation.getMoneyAmount() == 0) {
+			errors.rejectValue("moneyAmount", "zero", "Se debe realizar una donación superior a 0 euros");
+		}
 	}
 
 	@Override

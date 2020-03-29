@@ -37,6 +37,7 @@ import org.springframework.samples.petclinic.repository.OwnerRepository;
 import org.springframework.samples.petclinic.repository.PetRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 import org.springframework.samples.petclinic.repository.VisitRepository;
+import org.springframework.samples.petclinic.service.exception.NewBudgetCantBeLessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -186,6 +187,17 @@ public class ClinicService {
 	@Transactional
 	public void saveCause(final Cause cause) throws DataAccessException {
 		this.causeRepository.save(cause);
+	}
+	
+	@Transactional
+	public void saveCause(final Cause cause, Cause oldCause) throws DataAccessException, NewBudgetCantBeLessException {
+		Integer oldBudget = oldCause.getBudget();
+		Integer newBudget = cause.getBudget();
+		if(oldBudget>newBudget) {
+			throw new NewBudgetCantBeLessException();
+		} else {
+			this.causeRepository.save(cause);
+		}
 	}
 
 	@Transactional
