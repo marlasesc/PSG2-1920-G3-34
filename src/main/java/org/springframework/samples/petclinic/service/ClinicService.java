@@ -188,12 +188,11 @@ public class ClinicService {
 	public void saveCause(final Cause cause) throws DataAccessException {
 		this.causeRepository.save(cause);
 	}
-	
+
 	@Transactional
-	public void saveCause(final Cause cause, Cause oldCause) throws DataAccessException, NewBudgetCantBeLessException {
-		Integer oldBudget = oldCause.getBudget();
-		Integer newBudget = cause.getBudget();
-		if(oldBudget>newBudget) {
+	public void saveCause(final Cause cause, final Integer totalDonations) throws DataAccessException, NewBudgetCantBeLessException {
+
+		if (totalDonations > cause.getBudget()) {
 			throw new NewBudgetCantBeLessException();
 		} else {
 			this.causeRepository.save(cause);

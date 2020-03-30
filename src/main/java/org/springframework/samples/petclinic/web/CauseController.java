@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
@@ -42,8 +41,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CauseController {
 
-	private final ClinicService clinicService;
-	private final CauseRepository causeRepository;
+	private final ClinicService		clinicService;
+	private final CauseRepository	causeRepository;
 
 
 	@ModelAttribute("cause")
@@ -85,14 +84,15 @@ public class CauseController {
 		if (result.hasErrors()) {
 			return "causes/createOrUpdateCauseForm";
 		} else {
-			Cause causeToUpdate=this.causeRepository.findById(causeId);
-			BeanUtils.copyProperties(cause, causeToUpdate, "id","name","description", "budget", "organization");                                                                                  
-            try {                    
-                this.clinicService.saveCause(cause, causeToUpdate);                    
-            } catch (NewBudgetCantBeLessException ex) {
-                result.rejectValue("budget", "illegalData", "Budget cant be less than old budget");
-                return "causes/createOrUpdateCauseForm";
-            }
+			cause.setId(causeId);
+			Cause oldcause = this.clinicService.findCauseById(causeId);
+			Integer causeDonations = oldcause.getDonations().stream().mapToInt(x -> x.getMoneyAmount()).sum();
+			try {
+				this.clinicService.saveCause(cause, causeDonations);
+			} catch (NewBudgetCantBeLessException ex) {
+				result.rejectValue("budget", "illegalData", "Budget cant be less than total donations");
+				return "causes/createOrUpdateCauseForm";
+			}
 			return "redirect:/causes/{causeId}";
 		}
 	}
@@ -101,6 +101,9 @@ public class CauseController {
 	public ModelAndView showCause(@PathVariable("causeId") final int causeId) {
 		ModelAndView mav = new ModelAndView("causes/causeDetails");
 		Integer sumDonations = this.clinicService.findDonationsByCauseId(causeId);
+		if (sumDonations == null) {
+			sumDonations = 0;
+		}
 		mav.addObject("sumDonations", sumDonations);
 		mav.addObject(this.clinicService.findCauseById(causeId));
 		return mav;
