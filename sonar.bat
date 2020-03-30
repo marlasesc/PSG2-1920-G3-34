@@ -1,0 +1,1 @@
+mvn sonar:sonar -Dsonar.projectKey=PSG2-1920-G3-34 -Dsonar.host.url=http://oitilo.us.es:9000 -Dsonar.login=8f235e19d806b31bae582a3ce89683cae6764e0a
