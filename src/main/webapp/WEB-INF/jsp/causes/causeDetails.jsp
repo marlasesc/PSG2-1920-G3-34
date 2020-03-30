@@ -37,11 +37,13 @@
     </spring:url>
     <a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Editar causa</a>
     
+    					<c:if test="${cause.budget>sumDonations}">
+    
     <spring:url value="{causeId}/donations/new" var="addDonationUrl">
         <spring:param name="causeId" value="${cause.id}"/>
     </spring:url>
     <a href="${fn:escapeXml(addDonationUrl)}" class="btn btn-default">Realizar una donación</a>
-    
+    </c:if>
     <h2>Donations</h2>
 
     <table id="donationsTable" class="table table-striped">
