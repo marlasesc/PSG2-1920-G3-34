@@ -51,3 +51,13 @@ INSERT INTO visits VALUES (1, 7, '2013-01-01', 'Vacuna de la rabia');
 INSERT INTO visits VALUES (2, 8, '2013-01-02', 'Vacuna de la rabia');
 INSERT INTO visits VALUES (3, 8, '2013-01-03', 'Castrado');
 INSERT INTO visits VALUES (4, 7, '2013-01-04', 'Rociado');
+
+INSERT INTO causes VALUES (1, 'causa1', 'prueba1', 10000, 'organization1');
+INSERT INTO causes VALUES (2, 'causa2', 'prueba2', 5000, 'organization2');
+INSERT INTO causes VALUES (3, 'causa3', 'prueba3', 71000, 'organization3');
+
+
+INSERT INTO donations VALUES (1, 'donation1', 'prueba1', 10, '2020-03-26', 1);  
+INSERT INTO donations VALUES (2, 'donation2', 'prueba2', 21000, '2020-03-26', 3);  
+INSERT INTO donations VALUES (3, 'donation3', 'prueba3', 50000, '2020-03-26', 3);  
+

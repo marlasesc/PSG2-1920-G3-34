@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.web;
 
 import java.util.List;
@@ -10,7 +11,11 @@ import org.springframework.validation.Validator;
 
 public class BookingValidator implements Validator {
 
-	private static final String REQUIRED = "required";
+	private static final String	REQUIRED	= "required";
+
+	private static final String	OVERLAPED	= "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva";
+	private static final String	DATE		= "La fecha de fin debe ser posterior o igual a la fecha de inicio";
+
 
 	@Override
 	public boolean supports(final Class<?> clazz) {
@@ -27,9 +32,9 @@ public class BookingValidator implements Validator {
 		}
 
 		// startDate must be after every other finishDate
-		if (booking.getStartDate() != null && !this.isDateNotOverlaped(booking, booking.getPet().getBookings())) {
-			errors.rejectValue("startDate", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva");
-			errors.rejectValue("finishDate", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva", "El intervalo de la nueva reserva no deber solapar el intervalo de ninguna otra reserva");
+		if (booking.getStartDate() != null && !this.isDateNotOverlaped(booking.getPet().getBookings())) {
+			errors.rejectValue("startDate", BookingValidator.OVERLAPED, BookingValidator.OVERLAPED);
+			errors.rejectValue("finishDate", BookingValidator.OVERLAPED, BookingValidator.OVERLAPED);
 		}
 
 		// finishDate validation
@@ -39,18 +44,14 @@ public class BookingValidator implements Validator {
 
 		// finishDate must be after startDate
 		if (booking.getStartDate() != null && booking.getFinishDate() != null && booking.getStartDate().isAfter(booking.getFinishDate())) {
-			errors.rejectValue("finishDate", "La fecha de fin debe ser posterior o igual a la fecha de inicio", "La fecha de fin debe ser posterior o igual a la fecha de inicio");
+			errors.rejectValue("finishDate", BookingValidator.DATE, BookingValidator.DATE);
 		}
 	}
 
-	private boolean isDateNotOverlaped(final Booking booking, final List<Booking> bookings) {
-		List<Booking> oldBookings = bookings.stream()
-			.filter(b -> b.getFinishDate() != null && b.getStartDate() != null)
-			.collect(Collectors.toList());
+	private boolean isDateNotOverlaped(final List<Booking> bookings) {
+		List<Booking> oldBookings = bookings.stream().filter(b -> b.getFinishDate() != null && b.getStartDate() != null).collect(Collectors.toList());
 
-		return IntStream.range(0, oldBookings.size() - 1)
-			.boxed()
-			.allMatch(i -> !oldBookings.get(i).getStartDate().isBefore(oldBookings.get(i+1).getFinishDate()));
+		return IntStream.range(0, oldBookings.size() - 1).boxed().allMatch(i -> !oldBookings.get(i).getStartDate().isBefore(oldBookings.get(i + 1).getFinishDate()));
 	}
 
 }

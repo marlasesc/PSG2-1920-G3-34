@@ -14,32 +14,22 @@
  * limitations under the License.
  */
 
-package org.springframework.samples.petclinic.model;
+package org.springframework.samples.petclinic.repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Cause;
 
-/**
- * Simple domain object representing a list of veterinarians. Mostly here to be used for
- * the 'vets' {@link org.springframework.web.servlet.view.xml.MarshallingView}.
- *
- * @author Arjen Poutsma
- */
-@XmlRootElement
-public class Vets {
+public interface CauseRepository {
 
-	private List<Vet> vetList;
+	Collection<Cause> findAll() throws DataAccessException;
 
+	void save(Cause cause) throws DataAccessException;
 
-	@XmlElement
-	public List<Vet> getVetList() {
-		if (this.vetList == null) {
-			this.vetList = new ArrayList<>();
-		}
-		return this.vetList;
-	}
+	Cause findById(int causeId) throws DataAccessException;
+
+	void deleteById(int id) throws DataAccessException;
+	
 
 }

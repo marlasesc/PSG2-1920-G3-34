@@ -1,3 +1,24 @@
+CREATE TABLE IF NOT EXISTS causes (
+  id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  budget INT(9) UNSIGNED NOT NULL,
+  organization VARCHAR(80) NOT NULL,
+  INDEX(name)
+) engine=InnoDB;
+
+CREATE TABLE IF NOT EXISTS donations (
+  id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  description VARCHAR(255),
+  money_amount INT(9) UNSIGNED NOT NULL,
+  date_donation DATE,
+  cause_id INT(4) UNSIGNED NOT NULL,
+  FOREIGN KEY (cause_id) REFERENCES causes(id),
+  UNIQUE (cause_id)
+  INDEX(name)
+) engine=InnoDB;
+
 CREATE TABLE IF NOT EXISTS vets (
   id INT(4) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(30),

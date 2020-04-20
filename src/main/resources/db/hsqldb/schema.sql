@@ -5,7 +5,27 @@ DROP TABLE visits IF EXISTS;
 DROP TABLE pets IF EXISTS;
 DROP TABLE types IF EXISTS;
 DROP TABLE owners IF EXISTS;
+DROP TABLE causes IF EXISTS;
+DROP TABLE donations IF EXISTS;
 
+CREATE TABLE causes (
+  id INTEGER IDENTITY PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  budget       INTEGER NOT NULL,
+  organization VARCHAR(80) NOT NULL,
+) ;
+
+CREATE TABLE donations (
+  id INTEGER IDENTITY PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,
+  description VARCHAR(255),
+  money_amount INTEGER NOT NULL,
+  date_donation DATE,
+  cause_id INTEGER NOT NULL
+);
+ALTER TABLE donations ADD CONSTRAINT fk_donations_causes FOREIGN KEY (cause_id) REFERENCES causes (id);
+CREATE INDEX donations_name ON donations (name);
 
 CREATE TABLE vets (
   id         INTEGER IDENTITY PRIMARY KEY,
