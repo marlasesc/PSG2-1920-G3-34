@@ -18,7 +18,6 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
 
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class PetController {
 
 	private static final String	VIEWS_PETS_CREATE_OR_UPDATE_FORM	= "pets/createOrUpdatePetForm";
+
+	private static final String	REDIRECT_OWNER						= "redirect:/owners/{ownerId}";
 
 	private final ClinicService	clinicService;
 
@@ -96,7 +97,7 @@ public class PetController {
 		} else {
 			owner.addPet(pet);
 			this.clinicService.savePet(pet);
-			return "redirect:/owners/{ownerId}";
+			return PetController.REDIRECT_OWNER;
 		}
 	}
 
@@ -115,7 +116,7 @@ public class PetController {
 		} else {
 			pet.setOwner(owner);
 			this.clinicService.savePet(pet);
-			return "redirect:/owners/{ownerId}";
+			return PetController.REDIRECT_OWNER;
 		}
 	}
 
@@ -125,10 +126,8 @@ public class PetController {
 		this.clinicService.deleteVisitsByPetId(petId);
 		this.clinicService.deletePetById(petId);
 
-		return "redirect:/owners/{ownerId}";
+		return PetController.REDIRECT_OWNER;
 
 	}
-	
-	
 
 }

@@ -25,7 +25,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Cause;
 import org.springframework.samples.petclinic.model.Donation;
-import org.springframework.samples.petclinic.repository.CauseRepository;
 import org.springframework.samples.petclinic.service.ClinicService;
 import org.springframework.samples.petclinic.service.exception.NewBudgetCantBeLessException;
 import org.springframework.stereotype.Controller;
@@ -41,31 +40,30 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CauseController {
 
-	private final ClinicService		clinicService;
-	private final CauseRepository	causeRepository;
+	private static final String	VIEW_CREATE_UPDATE_CAUSE_FORM	= "causes/createOrUpdateCauseForm";
+
+	private final ClinicService	clinicService;
 
 
 	@ModelAttribute("cause")
 	public Cause loadCause() {
-		Cause cause = new Cause();
-		return cause;
+		return new Cause();
 	}
 
 	@Autowired
-	public CauseController(final ClinicService clinicService, final CauseRepository causeRepository) {
+	public CauseController(final ClinicService clinicService) {
 		this.clinicService = clinicService;
-		this.causeRepository = causeRepository;
 	}
 
 	@GetMapping(value = "/causes/new")
 	public String initNewCauseForm(final Map<String, Object> model) {
-		return "causes/createOrUpdateCauseForm";
+		return CauseController.VIEW_CREATE_UPDATE_CAUSE_FORM;
 	}
 
 	@PostMapping(value = "/causes/new")
 	public String processNewCauseForm(@Valid final Cause cause, final BindingResult result) {
 		if (result.hasErrors()) {
-			return "causes/createOrUpdateCauseForm";
+			return CauseController.VIEW_CREATE_UPDATE_CAUSE_FORM;
 		} else {
 			this.clinicService.saveCause(cause);
 			return "redirect:/causes";
@@ -76,13 +74,13 @@ public class CauseController {
 	public String initUpdateOwnerForm(@PathVariable("causeId") final int causeId, final Model model) {
 		Cause cause = this.clinicService.findCauseById(causeId);
 		model.addAttribute(cause);
-		return "causes/createOrUpdateCauseForm";
+		return CauseController.VIEW_CREATE_UPDATE_CAUSE_FORM;
 	}
 
 	@PostMapping(value = "/causes/{causeId}/edit")
 	public String processUpdateOwnerForm(@Valid final Cause cause, final BindingResult result, @PathVariable("causeId") final int causeId) {
 		if (result.hasErrors()) {
-			return "causes/createOrUpdateCauseForm";
+			return CauseController.VIEW_CREATE_UPDATE_CAUSE_FORM;
 		} else {
 			cause.setId(causeId);
 			Cause oldcause = this.clinicService.findCauseById(causeId);
@@ -91,7 +89,7 @@ public class CauseController {
 				this.clinicService.saveCause(cause, causeDonations);
 			} catch (NewBudgetCantBeLessException ex) {
 				result.rejectValue("budget", "illegalData", "Budget cant be less than total donations");
-				return "causes/createOrUpdateCauseForm";
+				return CauseController.VIEW_CREATE_UPDATE_CAUSE_FORM;
 			}
 			return "redirect:/causes/{causeId}";
 		}
