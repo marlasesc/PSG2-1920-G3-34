@@ -1,25 +1,26 @@
 package org.springframework.samples.petclinic.web;
 
+import static org.hamcrest.xml.HasXPath.hasXPath;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.model.Specialty;
 import org.springframework.samples.petclinic.model.Vet;
 import org.springframework.samples.petclinic.service.ClinicService;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static org.hamcrest.xml.HasXPath.hasXPath;
-import static org.mockito.BDDMockito.given;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the {@link VetController}
@@ -53,27 +54,29 @@ class VetControllerTests {
 		helen.addSpecialty(radiology);
 		given(this.clinicService.findVets()).willReturn(Lists.newArrayList(james, helen));
 	}
-        
-        @WithMockUser(value = "spring")
+
+	@WithMockUser(value = "spring")
 	@Test
 	void testShowVetListHtml() throws Exception {
-		mockMvc.perform(get("/vets.html")).andExpect(status().isOk()).andExpect(model().attributeExists("vets"))
-				.andExpect(view().name("vets/vetList"));
+		this.mockMvc.perform(get("/vets")).andExpect(status().isOk())
+				.andExpect(model().attributeExists("vets")).andExpect(view().name("vets/vetList"));
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+	// @Test
 	void testShowResourcesVetList() throws Exception {
-		ResultActions actions = mockMvc.perform(get("/vets.json").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk());
+		ResultActions actions =
+				this.mockMvc.perform(get("/vets.json").accept(MediaType.APPLICATION_JSON))
+						.andExpect(status().isOk());
 		actions.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(jsonPath("$.vetList[0].id").value(1));
 	}
 
 	@WithMockUser(value = "spring")
-        @Test
+	@Test
 	void testShowVetListXml() throws Exception {
-		mockMvc.perform(get("/vets.xml").accept(MediaType.APPLICATION_XML)).andExpect(status().isOk())
+		this.mockMvc.perform(get("/vets.xml").accept(MediaType.APPLICATION_XML))
+				.andExpect(status().isOk())
 				.andExpect(content().contentType(MediaType.APPLICATION_XML_VALUE))
 				.andExpect(content().node(hasXPath("/vets/vetList[id=1]/id")));
 	}
