@@ -5,7 +5,7 @@ import org.springframework.samples.petclinic.model.Booking;
 
 public interface BookingRepository {
 
-	void save(Booking booking) throws DataAccessException;
+	Booking save(Booking booking) throws DataAccessException;
 
 	void delete(Booking booking) throws DataAccessException;
 
