@@ -17,7 +17,7 @@
 				<th>Descripcion</th>
 				<th>Objetivo</th>
 				<th>Organizacion</th>
-				<th></th>
+				<th/>
 			</tr>
 		</thead>
 		<tbody>
@@ -33,10 +33,13 @@
 					<td><c:out value="${cause.description} " /></td>
 					<td><c:out value="${cause.budget} " /></td>
 					<td><c:out value="${cause.organization} " /></td>
-					<c:if test="${empty cause.donations}">
-					<td><spring:url value="/causes/{causeId}/delete" var="deleteCauseUrl">
-							<spring:param name="causeId" value="${cause.id}" />
-						</spring:url> <a href="${fn:escapeXml(deleteCauseUrl)}">Eliminar causa</a></td></c:if>
+					
+					<td>
+						<c:if test="${empty cause.donations}">
+						<spring:url value="/causes/{causeId}/delete" var="deleteCauseUrl">
+								<spring:param name="causeId" value="${cause.id}" />
+							</spring:url> <a href="${fn:escapeXml(deleteCauseUrl)}">Eliminar causa</a></c:if>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
