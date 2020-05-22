@@ -46,10 +46,13 @@
         <tr>
 	        <td>
 	        	<a class="btn btn-default" href='<spring:url value="/vets/new" htmlEscape="true"/>'>Añadir veterinario</a>
-	        </td>
-            <td>
+	        </td>           
+        </tr>
+        <tr>
+        	<td>
+        		<br>
                 <a href="<spring:url value="/vets.xml" htmlEscape="true" />">View as XML</a>
-            </td>            
+            </td> 
         </tr>
     </table>
 </petclinic:layout>
